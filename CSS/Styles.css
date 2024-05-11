@@ -1,0 +1,19 @@
+/* a{
+    color: white !important;
+} */
+.FieldInfo{
+    color: rgb(251, 174, 44) !important;
+    font-family: Bitter, Georgia, "Times New Roman", Times, serif !important;
+    font-size: 1.2em !important;
+}
+.CommentBlock{
+    background-color: #F6F7F9 !important;
+}
+.heading{
+    font-family: Bitter, Georgia, "Times New Roman", Times, Sherif;
+    font-weight : bold;
+    color : #005E90;
+}
+.heading:hover{
+    color : #0090DB;
+}
