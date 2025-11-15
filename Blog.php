@@ -10,84 +10,156 @@ require_once("Includes/Sessions.php");
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
-      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
-  <link href="CSS/Styles.css?v=1.0" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
+  <link href="CSS/Styles.css?v=2.0" rel="stylesheet" type="text/css" />
   <script src="https://kit.fontawesome.com/d2a0a9da83.js" crossorigin="anonymous"></script>
-  <!-- <style media="screen">
-    .heading {
-      font-family: Bitter, Georgia, "Times New Roman", Times, Sherif;
-      font-weight: bold;
-      color: #005E90;
+  <style>
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
     }
 
-    .heading:hover {
-      color: #0090DB;
+    .top-bar {
+      height: 10px;
+      background: linear-gradient(90deg, #27aae1 0%, #1e8bb8 100%);
     }
-  </style> -->
-  <title>Blog Page</title>
+
+    .blog-header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      padding: 3rem 0;
+      margin-bottom: 2rem;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .blog-header h1 {
+      color: white;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .blog-header .lead {
+      color: #ecf0f1;
+      font-size: 1.1rem;
+    }
+
+    .post-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      margin-bottom: 2rem;
+    }
+
+    .post-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .post-card img {
+      max-height: 350px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .post-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .post-meta a {
+      color: #27aae1;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .post-meta a:hover {
+      color: #1e8bb8;
+    }
+
+    .search-form {
+      position: relative;
+    }
+
+    .search-form .form-control {
+      border-radius: 50px;
+      padding-right: 100px;
+    }
+
+    .search-form .btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 50px;
+    }
+  </style>
+  <title>Blog - ABDELKRIMBELLAGNECH.COM</title>
 </head>
 
 <body>
-  <!-- Display the heading in different forms h1, h2, h3, h4...
-    <h1 class="display-1">Hello World</h1>
-    <h1 class="display-2">Hello World</h1>
-    <h1 class="display-3">Hello World</h1>
-    <h1 class="display-4">Hello World</h1>
-    <h1 class="display-5">Hello World</h1> -->
-
   <!-- NAVBAR -->
-  <div style="height: 10px; background-color: #27aae1"></div>
+  <div class="top-bar"></div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a href="#" class="navbar-brand"> ABDELKRIMBELLAGNECH.COM</a>
-      <!-- So here we used some javascript oriented to bootstrap, so when data-toggle is called
-        we go to data-target that should have the same content as the content in the id in the div wanted to be collapsed (navbarCollapseCMS)-->
-      <!-- shows and hides the navigation links when the window is small. When the toggle button is clicked, the data-toggle attribute triggers the collapse of the navbar-collapse element with the ID navbarcollapsecms using the data-target attribute. -->
+      <a href="#" class="navbar-brand"><i class="fas fa-blog"></i> ABDELKRIMBELLAGNECH.COM</a>
       <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarcollapseCMS">
         <ul class="navbar-nav mr-auto">
-
           <li class="nav-item m-1">
-            <a href="Blog.php" class="nav-link">Home</a>
+            <a href="Blog.php" class="nav-link"><i class="fas fa-home"></i> Home</a>
           </li>
           <li class="nav-item m-1">
-            <a href="#" class="nav-link">About Us</a>
+            <a href="#" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
           </li>
           <li class="nav-item m-1">
-            <a href="Blog.php" class="nav-link">Blog</a>
+            <a href="Blog.php" class="nav-link"><i class="fas fa-newspaper"></i> Blog</a>
           </li>
           <li class="nav-item m-1">
-            <a href="#" class="nav-link">Contact Us</a>
+            <a href="#" class="nav-link"><i class="fas fa-envelope"></i> Contact</a>
           </li>
           <li class="nav-item m-1">
-            <a href="#" class="nav-link">features</a>
+            <a href="#" class="nav-link"><i class="fas fa-star"></i> Features</a>
           </li>
-
         </ul>
         <ul class="navbar-nav ml-auto">
-          <form class="form-inline d-none d-sm-block" action="Blog.php">
-            <div class="form-group">
-              <input class="form-control mr-2" type="text" name="Search" placeholder="Search here" id="" value="">
-              <button class="btn btn-primary" name="SearchButton">Go</button>
-
+          <form class="form-inline d-none d-sm-block search-form" action="Blog.php">
+            <div class="form-group mb-0">
+              <input class="form-control" type="text" name="Search" placeholder="Search articles..." value="">
+              <button class="btn btn-primary btn-sm" name="SearchButton"><i class="fas fa-search"></i></button>
             </div>
           </form>
         </ul>
       </div>
     </div>
   </nav>
-  <div style="height: 10px; background-color: #27aae1"></div>
+  <div class="top-bar"></div>
   <!-- NAVBAR END -->
 
   <!-- HEADER -->
+  <div class="blog-header">
+    <div class="container text-center">
+      <h1><i class="fas fa-blog"></i> Complete Responsive CMS Blog</h1>
+      <p class="lead">Explore articles and insights powered by modern PHP</p>
+    </div>
+  </div>
+
   <div class="container">
     <div class="row mt-4 mb-4">
-
       <!-- MAIN AREA -->
-      <div class="col-sm-8">
+      <div class="col-lg-8">
         <h1>The complete Responsive CMS Blog</h1>
         <h1 class="lead">The complete blog by using PHP by Jazeb Akram</h1>
         <?php
@@ -134,25 +206,24 @@ require_once("Includes/Sessions.php");
           $Image = $DataRows['image'];
           $PostDescription = $DataRows['post'];
           ?>
-          <div class="card">
-            <img src="Upload/<?php echo $Image; ?>" style="max-height: 350px;" alt="" class="img-fluid card-img-top">
-            <!-- img-fluid for responsice effect -->
+          <div class="card post-card">
+            <img src="Upload/<?php echo htmlentities($Image); ?>" alt="<?php echo htmlentities($postTitle); ?>" class="img-fluid card-img-top">
             <div class="card-body">
               <h4 class="card-title">
                 <?php echo htmlentities($postTitle); ?>
               </h4>
-              <small class="text-muted">category : <span class="text-dark">
+              <div class="post-meta">
+                <small class="text-muted">
+                  <i class="fas fa-folder"></i> 
                   <a href="Blog.php?category=<?php echo htmlentities($Category); ?>"><?php echo htmlentities($Category); ?></a>
-                </span> & Written By
-                <a href="Profil.php?username=<?php echo htmlentities($Admin); ?>"> <?php echo htmlentities($Admin); ?>
-                </a> On
-                <?php echo htmlentities($DateTime); ?>
-              </small>
-              <span style="float: right;" class="badge badge-dark text-light">Comments
-                <?php
-                echo ApproveCommentsAccordingToPosts($PostId);
-                ?>
-              </span>
+                  <i class="fas fa-user ml-2"></i>
+                  <a href="Profil.php?username=<?php echo htmlentities($Admin); ?>"><?php echo htmlentities($Admin); ?></a>
+                  <i class="fas fa-calendar ml-2"></i> <?php echo htmlentities($DateTime); ?>
+                </small>
+                <span class="badge badge-primary">
+                  <i class="fas fa-comments"></i> <?php echo ApproveCommentsAccordingToPosts($PostId); ?>
+                </span>
+              </div>
               <hr>
               <p class="card-text">
                 <?php if (strlen($PostDescription) > 150) {
@@ -160,12 +231,11 @@ require_once("Includes/Sessions.php");
                 } ?>
                 <?php echo htmlentities($PostDescription); ?>
               </p>
-              <a href="FullPost.php?id=<?php echo $PostId; ?>" style="float: right;">
-                <span class="btn btn-info">read More >></span>
+              <a href="FullPost.php?id=<?php echo $PostId; ?>" class="btn btn-info float-right">
+                Read More <i class="fas fa-arrow-right"></i>
               </a>
             </div>
           </div>
-          <br>
         <?php } ?>
         <!-- Pagination dynamicaly -->
         <nav>
@@ -237,28 +307,21 @@ require_once("Includes/Sessions.php");
 
   <!-- div..container and div.row are indispensable for any elements , tb9a tzidhom dima -->
   <!-- FOOTER -->
-  <footer class="bg-dark text-white">
+  <footer class="bg-dark text-white py-4">
     <div class="container">
-      <!-- row means occupying all the length of our container -->
       <div class="row">
-        <!-- to fully work with row, we need to specify which columns -->
-        <div class="col">
-          <p class="lead text-center">
-            Theme by | Abdelkrim Bellagnech | <span id="year"></span> $copy;
-            ----All right Reserved.
+        <div class="col text-center">
+          <p class="lead mb-2">
+            <i class="fas fa-code"></i> Developed by Abdelkrim Bellagnech | <span id="year"></span> &copy; All Rights Reserved
           </p>
-          <p class="text-center small">
-            <a style="color: white; text-decoration: none; cursor: pointer" href="http://jazebakram.com/coupons/"
-              target="_blank"></a>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
-            dolorum error nihil voluptas quidem necessitatibus consequatur
-            maiores fugit, ab dolores tempora vitae laboriosam non et natus
-            recusandae ipsam
+          <p class="small mb-0">
+            Modern CMS Blog System built with PHP, MySQL & Bootstrap
           </p>
         </div>
       </div>
     </div>
   </footer>
-  <div style="height: 10px; background-color: #27aae1"></div>
+  <div class="top-bar"></div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>

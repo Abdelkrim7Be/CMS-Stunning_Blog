@@ -14,90 +14,108 @@ Confirm_Login(); ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
-  <link rel="stylesheet" href="CSS/Styles.css" />
+  <link rel="stylesheet" href="CSS/Styles.css?v=2.0" />
   <script src="https://kit.fontawesome.com/d2a0a9da83.js" crossorigin="anonymous"></script>
-  <title>Posts</title>
-  <!-- It is an Admin Page where he shows all the posts  -->
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+    .top-bar {
+      height: 10px;
+      background: linear-gradient(90deg, #27aae1 0%, #1e8bb8 100%);
+    }
+    .admin-header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .admin-header h1 {
+      font-weight: 700;
+    }
+    .btn-action {
+      border-radius: 50px;
+      font-weight: 600;
+      padding: 0.6rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .btn-action:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+  <title>Manage Posts - Admin Panel</title>
 </head>
 
 <body>
-  <!-- Display the heading in different forms h1, h2, h3, h4...
-    <h1 class="display-1">Hello World</h1>
-    <h1 class="display-2">Hello World</h1>
-    <h1 class="display-3">Hello World</h1>
-    <h1 class="display-4">Hello World</h1>
-    <h1 class="display-5">Hello World</h1> -->
-
   <!-- NAVBAR -->
-  <div style="height: 10px; background-color: #27aae1"></div>
+  <div class="top-bar"></div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a href="#" class="navbar-brand"> ABDELKRIMBELLAGNECH.COM</a>
-      <!-- So here we used some javascript oriented to bootstrap, so when data-toggle is called
-        we go to data-target that should have the same content as the content in the id in the div wanted to be collapsed (navbarCollapseCMS)-->
-      <!-- shows and hides the navigation links when the window is small. When the toggle button is clicked, the data-toggle attribute triggers the collapse of the navbar-collapse element with the ID navbarcollapsecms using the data-target attribute. -->
+      <a href="#" class="navbar-brand"><i class="fas fa-blog"></i> ABDELKRIMBELLAGNECH.COM</a>
       <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarcollapseCMS">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item m-1">
-            <a href="MyProfil.php" class="nav-link"><i class="fa-solid fa-user"></i> My Profil</a>
+            <a href="MyProfil.php" class="nav-link"><i class="fa-solid fa-user"></i> My Profile</a>
           </li>
           <li class="nav-item m-1">
-            <a href="Dashboard.php" class="nav-link">Dashboard</a>
+            <a href="Dashboard.php" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
           </li>
           <li class="nav-item m-1">
-            <a href="Posts.php" class="nav-link">Posts</a>
+            <a href="Posts.php" class="nav-link active"><i class="fas fa-blog"></i> Posts</a>
           </li>
           <li class="nav-item m-1">
-            <a href="Categories.php" class="nav-link">Categories</a>
+            <a href="Categories.php" class="nav-link"><i class="fas fa-folder"></i> Categories</a>
           </li>
           <li class="nav-item m-1">
-            <a href="Admins.php" class="nav-link">Manage admins</a>
+            <a href="Admins.php" class="nav-link"><i class="fas fa-users-gear"></i> Manage Admins</a>
           </li>
           <li class="nav-item m-1">
-            <a href="Comments.php" class="nav-link">Comments</a>
+            <a href="Comments.php" class="nav-link"><i class="fas fa-comments"></i> Comments</a>
           </li>
           <li class="nav-item m-1">
-            <a href="Blog.php?page=1" class="nav-link">Live Blogs</a>
+            <a href="Blog.php?page=1" class="nav-link"><i class="fas fa-globe"></i> Live Blog</a>
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a href="Logout.php" class="nav-link text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            <a href="Logout.php" class="nav-link btn btn-sm btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  <div style="height: 10px; background-color: #27aae1"></div>
+  <div class="top-bar"></div>
   <!-- NAVBAR END -->
 
   <!-- HEADER -->
-  <header class="bg-dark text-white py-3">
+  <header class="admin-header text-white">
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <h1><i class="fas fa-blog" style="color: #27aae1;"></i> Blog Posts</h1>
+        <div class="col-md-12 mb-3">
+          <h1><i class="fas fa-blog" style="color: #27aae1;"></i> Manage Posts</h1>
         </div>
         <div class="col-lg-3 mb-2">
-          <a href="AddNewPost.php" class="btn btn-primary btn-block">
-            <i class="fas fa-edit"></i>Add New Post
+          <a href="AddNewPost.php" class="btn btn-primary btn-action btn-block">
+            <i class="fas fa-edit"></i> Add New Post
           </a>
         </div>
         <div class="col-lg-3 mb-2">
-          <a href="Categories.php" class="btn btn-info btn-block">
-            <i class="fas fa-folder-plus"></i>Add New Category
+          <a href="Categories.php" class="btn btn-warning btn-action btn-block">
+            <i class="fas fa-folder-plus"></i> Add Category
           </a>
         </div>
         <div class="col-lg-3 mb-2">
-          <a href="Admins.php" class="btn btn-warning btn-block">
-            <i class="fas fa-user-plus"></i>Add New Admin
+          <a href="Admins.php" class="btn btn-danger btn-action btn-block">
+            <i class="fas fa-user-plus"></i> Add Admin
           </a>
         </div>
         <div class="col-lg-3 mb-2">
-          <a href="Comments.php" class="btn btn-success btn-block">
+          <a href="Comments.php" class="btn btn-success btn-action btn-block">
             <i class="fas fa-check mb-2"></i>Approve Comments
           </a>
         </div>
