@@ -82,9 +82,31 @@ if (isset($_POST['submit'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
-  <link rel="stylesheet" href="CSS/Styles.css" />
+  <link rel="stylesheet" href="CSS/Styles.css?v=2.0" />
   <script src="https://kit.fontawesome.com/d2a0a9da83.js" crossorigin="anonymous"></script>
-  <title>Add New Post</title>
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+    .top-bar {
+      height: 10px;
+      background: linear-gradient(90deg, #27aae1 0%, #1e8bb8 100%);
+    }
+    .admin-header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+  <title>Add New Post - Admin Panel</title>
 </head>
 
 <body>
