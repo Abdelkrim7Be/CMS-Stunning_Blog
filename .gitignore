@@ -1,0 +1,25 @@
+# IDE and Editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Log files
+*.log
+
+# Database config (if it contains sensitive data)
+# Includes/DB.php
+
+# User uploaded files (optional - uncomment if you don't want to track uploads)
+# Upload/
+
+# OS generated files
+Thumbs.db
+.DS_Store

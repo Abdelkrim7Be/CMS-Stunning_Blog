@@ -66,10 +66,37 @@ if (isset($_POST['Submit'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
-  <!-- <link rel="stylesheet" href="CSS/Styles.css" /> -->
-  <link href="CSS/Styles.css?v=1.0" rel="stylesheet" type="text/css" />
+  <link href="CSS/Styles.css?v=2.0" rel="stylesheet" type="text/css" />
   <script src="https://kit.fontawesome.com/d2a0a9da83.js" crossorigin="anonymous"></script>
-  <title>Full Post Page</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    .top-bar {
+      height: 10px;
+      background: linear-gradient(90deg, #27aae1 0%, #1e8bb8 100%);
+    }
+    .post-container {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .post-image {
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .comment-section {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+  </style>
+  <title>Full Post - ABDELKRIMBELLAGNECH.COM</title>
 </head>
 
 <body>
