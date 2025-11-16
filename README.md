@@ -168,9 +168,7 @@ sequenceDiagram
    - Edit `config/database.php` with your DB credentials.
    - Import `C.M.S.sql` into your MySQL server.
 4. **Run role management migration**
-   ```sh
-   bash setup_roles.sh
-   ```
+    *(If you need to set up roles, use the SQL migration in `database/migrations/add_roles.sql`)*
 5. **Set up web server**
    - Use `nginx.conf.example` as a template for your Nginx config.
    - Point your web root to `public/`.
@@ -180,7 +178,7 @@ sequenceDiagram
 ## Role Management
 
 - Roles: `super_admin`, `admin`, `editor`, `author`
-- Assign and manage roles via the admin panel or `setup_roles.sh` script
+- Assign and manage roles via the admin panel
 - Permissions are enforced in controllers and middleware
 - See `src/Core/Role.php` and `src/Core/Session.php` for implementation details
 
