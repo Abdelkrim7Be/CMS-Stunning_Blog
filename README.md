@@ -1,6 +1,4 @@
-# CMS Stunning Blog
-
-![Logo](public/assets/images/logo.png)
+# CMS - Lumina Blog
 
 ## Table of Contents
 
