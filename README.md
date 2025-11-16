@@ -37,17 +37,20 @@
 
 ## Screenshots
 
-
-### Home Page
-![Home Page](demo/Home_blogs.png)
-
 ### Website View
+
 ![Website View](demo/Website_view.png)
 
+### Home Page
+
+![Blogs](demo/Home_blogs.png)
+
 ### Admin Panel
+
 ![Admin Panel](demo/admin_panel.png)
 
 ### Role Management
+
 ![Role Management](demo/Role%20management.png)
 
 ---
@@ -168,7 +171,7 @@ sequenceDiagram
    - Edit `config/database.php` with your DB credentials.
    - Import `C.M.S.sql` into your MySQL server.
 4. **Run role management migration**
-    *(If you need to set up roles, use the SQL migration in `database/migrations/add_roles.sql`)*
+   _(If you need to set up roles, use the SQL migration in `database/migrations/add_roles.sql`)_
 5. **Set up web server**
    - Use `nginx.conf.example` as a template for your Nginx config.
    - Point your web root to `public/`.
