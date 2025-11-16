@@ -15,8 +15,12 @@
 // Public routes (no authentication required)
 $router->get('/', 'BlogController@index');
 $router->get('/blog', 'BlogController@index');
+$router->post('/', 'BlogController@index'); // Newsletter subscription
 $router->get('/post/{id}', 'BlogController@show');
+$router->post('/post/{id}', 'BlogController@show'); // Comment submission
 $router->get('/category/{id}', 'BlogController@category');
+$router->get('/about', 'BlogController@about');
+$router->get('/profile', 'BlogController@profile');
 
 // Authentication routes
 $router->get('/login', 'AuthController@showLoginForm');

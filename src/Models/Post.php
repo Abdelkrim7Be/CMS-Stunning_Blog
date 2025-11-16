@@ -201,13 +201,36 @@ class Post
      */
     public static function search(string $query): array
     {
+        $searchTerm = "%{$query}%";
         $sql = "SELECT * FROM posts
-                WHERE datetime LIKE :query 
-                   OR category LIKE :query 
-                   OR title LIKE :query 
-                   OR post LIKE :query
+                WHERE datetime LIKE :query1
+                   OR category LIKE :query2
+                   OR title LIKE :query3
+                   OR post LIKE :query4
                 ORDER BY id DESC";
 
-        return Database::query($sql, ['query' => "%{$query}%"]);
+        return Database::query($sql, [
+            'query1' => $searchTerm,
+            'query2' => $searchTerm,
+            'query3' => $searchTerm,
+            'query4' => $searchTerm
+        ]);
+    }
+
+    /**
+     * Get posts by author username
+     * 
+     * @param string $author
+     * @return array
+     */
+    public static function getByAuthor(string $author): array
+    {
+        $sql = "SELECT posts.*, category.title as category_name
+                FROM posts
+                LEFT JOIN category ON posts.category = category.id
+                WHERE posts.author = :author
+                ORDER BY posts.datetime DESC";
+
+        return Database::query($sql, ['author' => $author]);
     }
 }

@@ -3,17 +3,11 @@
 namespace App\Models;
 
 use App\Core\Database;
-use PDO;
 
 /**
  * User Model
  * 
- * Handles all database operations related to users/admins.
- * 
- * WHY Model?
- * - Separation: Database logic separate from controllers
- * - Reusability: Can use same methods across different controllers
- * - Security: Centralized, secure database queries
+ * Handles all database operations related to admins table
  */
 class User
 {
@@ -46,7 +40,7 @@ class User
      * 
      * @param string $username
      * @param string $password
-     * @return array|false Returns user data if valid, false otherwise
+     * @return array|false
      */
     public static function verifyLogin(string $username, string $password)
     {
@@ -56,13 +50,11 @@ class User
             return false;
         }
 
-        // Check if password is hashed or plain text (legacy support)
+        // Check if password is hashed or plain text
         if (password_verify($password, $user['password'])) {
-            // Modern hashed password
             return $user;
         } elseif ($user['password'] === $password) {
-            // Legacy plain text password (should be migrated!)
-            // TODO: Update to hashed password after successful login
+            // Plain text password (legacy)
             return $user;
         }
 
@@ -70,7 +62,7 @@ class User
     }
 
     /**
-     * Get all users/admins
+     * Get all admins
      * 
      * @return array
      */
@@ -81,26 +73,30 @@ class User
     }
 
     /**
-     * Create a new user
+     * Create a new admin
      * 
      * @param array $data
      * @return bool
      */
     public static function create(array $data): bool
     {
-        $sql = "INSERT INTO admins (username, password, aname, addedby) 
-                VALUES (:username, :password, :aname, :addedby)";
+        $sql = "INSERT INTO admins (username, password, aname, datetime, added_by, aheadline, abio, aimage) 
+                VALUES (:username, :password, :aname, :datetime, :added_by, :aheadline, :abio, :aimage)";
 
         return Database::execute($sql, [
             'username' => $data['username'],
             'password' => password_hash($data['password'], PASSWORD_DEFAULT),
-            'aname' => $data['aname'],
-            'addedby' => $data['addedby'] ?? 'System',
+            'aname' => $data['aname'] ?? $data['username'],
+            'datetime' => date('F-d-Y H:i:s'),
+            'added_by' => $data['added_by'] ?? 'System',
+            'aheadline' => $data['aheadline'] ?? '',
+            'abio' => $data['abio'] ?? '',
+            'aimage' => $data['aimage'] ?? 'avatar.jpg',
         ]);
     }
 
     /**
-     * Update user
+     * Update admin
      * 
      * @param int $id
      * @param array $data
@@ -113,11 +109,18 @@ class User
         $params = ['id' => $id];
 
         foreach ($data as $key => $value) {
-            if ($key === 'password') {
+            if ($key === 'id') {
+                continue;
+            }
+            if ($key === 'password' && !empty($value)) {
                 $value = password_hash($value, PASSWORD_DEFAULT);
             }
             $fields[] = "{$key} = :{$key}";
             $params[$key] = $value;
+        }
+
+        if (empty($fields)) {
+            return false;
         }
 
         $sql .= implode(', ', $fields) . " WHERE id = :id";
@@ -126,7 +129,7 @@ class User
     }
 
     /**
-     * Delete user
+     * Delete admin
      * 
      * @param int $id
      * @return bool
@@ -138,7 +141,7 @@ class User
     }
 
     /**
-     * Count total users
+     * Count total admins
      * 
      * @return int
      */
