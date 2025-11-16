@@ -1,0 +1,10 @@
+# Root .htaccess (Optional Security Layer)
+# This file should be placed in the ROOT directory
+# It prevents direct access to anything outside public/
+
+# Deny all access to the root directory
+Order Deny,Allow
+Deny from all
+
+# This ensures that ONLY the public/ folder is accessible
+# Even if someone tries to access /config/, /src/, etc., they'll be blocked

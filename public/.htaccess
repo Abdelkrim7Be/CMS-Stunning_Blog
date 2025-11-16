@@ -1,0 +1,58 @@
+# Apache .htaccess for Front-Controller Pattern
+# This file MUST be placed in the public/ directory
+
+<IfModule mod_rewrite.c>
+    # Enable URL rewriting
+    RewriteEngine On
+    
+    # Set the base directory (adjust if your app is in a subdirectory)
+    # If app is at http://localhost/cms-stunning-blog/public, use:
+    # RewriteBase /cms-stunning-blog/public
+    RewriteBase /
+    
+    # If the requested file or directory exists, serve it directly
+    # This allows access to actual files (CSS, JS, images, etc.)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Otherwise, route everything through index.php
+    # This is the magic that makes /login work instead of /login.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Prevent access to sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Force HTTPS (uncomment in production)
+# <IfModule mod_rewrite.c>
+#     RewriteCond %{HTTPS} off
+#     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+# Set security headers
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Enable XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# PHP settings
+<IfModule mod_php.c>
+    # Hide PHP version
+    php_flag expose_php off
+    
+    # Set max upload size (adjust as needed)
+    php_value upload_max_filesize 5M
+    php_value post_max_size 5M
+</IfModule>

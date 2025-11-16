@@ -14,6 +14,7 @@ A modern, responsive Content Management System built with PHP, MySQL, and Bootst
 ## Recent Enhancements
 
 ### Design & UI Improvements
+
 - Modern color palette with CSS variables for consistency
 - Gradient backgrounds and smooth animations
 - Enhanced card layouts with hover effects
@@ -22,12 +23,14 @@ A modern, responsive Content Management System built with PHP, MySQL, and Bootst
 - Responsive design optimizations
 
 ### Performance Optimizations
+
 - CSS file versioning for better caching
 - Optimized image loading
 - Cleaner code structure
 - Added .gitignore for better repository management
 
 ### User Experience
+
 - Improved search functionality
 - Better visual hierarchy
 - Enhanced form layouts
@@ -45,11 +48,13 @@ A modern, responsive Content Management System built with PHP, MySQL, and Bootst
 ## Installation
 
 1. Clone the repository
+
 ```bash
 git clone git@github.com:Abdelkrim7Be/CMS-Stunning_Blog.git
 ```
 
 2. Import the database
+
 ```bash
 mysql -u username -p database_name < C.M.S.sql
 ```

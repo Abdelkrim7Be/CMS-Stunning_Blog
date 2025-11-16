@@ -14,6 +14,33 @@
 # Log files
 *.log
 
+# Vendor directory (Composer dependencies)
+/vendor/
+
+# Environment configuration (contains sensitive data)
+.env
+
+# Legacy backup (old spaghetti code)
+/_legacy_backup/
+
+# Storage and logs
+/storage/logs/*.log
+/storage/cache/*
+!/storage/cache/.gitkeep
+
+# Uploaded files (optional - comment out if you want to track uploads)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Node modules (if you add frontend build tools later)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Testing
+/tests/coverage/
+.phpunit.result.cache
+
 # Database config (if it contains sensitive data)
 # Includes/DB.php
 
