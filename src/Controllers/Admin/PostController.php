@@ -49,6 +49,7 @@ class PostController extends Controller
      */
     public function create(): void
     {
+        // Authors and above can create posts
         $this->requireAuth();
 
         $categories = Category::all();
@@ -65,9 +66,8 @@ class PostController extends Controller
      */
     public function store(): void
     {
+        // Authors and above can create posts
         $this->requireAuth();
-
-        $user = Session::get('user');
 
         // Handle file upload
         $imageName = 'default.jpg';
@@ -88,7 +88,7 @@ class PostController extends Controller
             'datetime' => date('F-d-Y H:i:s'),
             'title' => $_POST['title'] ?? '',
             'category' => $_POST['category'] ?? '',
-            'author' => $user['username'] ?? '',
+            'author' => Session::username() ?? 'Unknown',
             'image' => $imageName,
             'post' => $_POST['post'] ?? '',
         ];
@@ -117,6 +117,14 @@ class PostController extends Controller
             return;
         }
 
+        // Check if user can edit this post
+        // Authors can only edit their own posts, Editors and above can edit any post
+        if (!Session::can('manage_all_posts') && $post['author'] !== Session::username()) {
+            Session::flash('error', 'You can only edit your own posts');
+            $this->redirect('/admin/posts');
+            return;
+        }
+
         $categories = Category::all();
 
         $this->view('admin/posts/edit', [
@@ -138,6 +146,13 @@ class PostController extends Controller
 
         if (!$post) {
             Session::flash('error', 'Post not found');
+            $this->redirect('/admin/posts');
+            return;
+        }
+
+        // Check if user can edit this post
+        if (!Session::can('manage_all_posts') && $post['author'] !== Session::username()) {
+            Session::flash('error', 'You can only edit your own posts');
             $this->redirect('/admin/posts');
             return;
         }
@@ -189,6 +204,14 @@ class PostController extends Controller
 
         if (!$post) {
             Session::flash('error', 'Post not found');
+            $this->redirect('/admin/posts');
+            return;
+        }
+
+        // Check if user can delete this post
+        // Authors can only delete their own posts, Editors and above can delete any post
+        if (!Session::can('delete_any_post') && $post['author'] !== Session::username()) {
+            Session::flash('error', 'You can only delete your own posts');
             $this->redirect('/admin/posts');
             return;
         }

@@ -11,6 +11,7 @@ namespace App\Core;
  * - Flash messages (shown once, then removed)
  * - Easy get/set/delete operations
  * - Authentication helper methods
+ * - Role-based access control
  */
 class Session
 {
@@ -126,20 +127,75 @@ class Session
     }
 
     /**
+     * Get authenticated user role
+     * 
+     * @return string|null
+     */
+    public static function role(): ?string
+    {
+        return $_SESSION['user_role'] ?? null;
+    }
+
+    /**
      * Set user authentication
      * 
      * @param int $userId
      * @param string $username
      * @param string $adminName
+     * @param string $role
      */
-    public static function login(int $userId, string $username, string $adminName): void
+    public static function login(int $userId, string $username, string $adminName, string $role = 'author'): void
     {
         $_SESSION['user_id'] = $userId;
         $_SESSION['username'] = $username;
         $_SESSION['admin_name'] = $adminName;
+        $_SESSION['user_role'] = $role;
 
         // Regenerate session ID to prevent session fixation attacks
         session_regenerate_id(true);
+    }
+
+    /**
+     * Check if user has a specific permission
+     * 
+     * @param string $permission
+     * @return bool
+     */
+    public static function can(string $permission): bool
+    {
+        $role = self::role();
+        if (!$role) {
+            return false;
+        }
+
+        return Role::hasPermission($role, $permission);
+    }
+
+    /**
+     * Check if user has a specific role
+     * 
+     * @param string $role
+     * @return bool
+     */
+    public static function hasRole(string $role): bool
+    {
+        return self::role() === $role;
+    }
+
+    /**
+     * Check if user role is higher or equal to given role
+     * 
+     * @param string $role
+     * @return bool
+     */
+    public static function isRoleOrHigher(string $role): bool
+    {
+        $userRole = self::role();
+        if (!$userRole) {
+            return false;
+        }
+
+        return Role::isHigherOrEqual($userRole, $role);
     }
 
     /**
@@ -148,6 +204,7 @@ class Session
     public static function logout(): void
     {
         unset($_SESSION['user_id']);
+        unset($_SESSION['user_role']);
         unset($_SESSION['username']);
         unset($_SESSION['admin_name']);
 
@@ -162,5 +219,58 @@ class Session
     {
         session_destroy();
         $_SESSION = [];
+    }
+
+    /**
+     * Generate CSRF token
+     * 
+     * @return string
+     */
+    public static function generateCsrfToken(): string
+    {
+        if (!self::has('csrf_token')) {
+            $token = bin2hex(random_bytes(32));
+            self::set('csrf_token', $token);
+        }
+
+        return self::get('csrf_token');
+    }
+
+    /**
+     * Get CSRF token (generates if doesn't exist)
+     * 
+     * @return string
+     */
+    public static function csrfToken(): string
+    {
+        return self::generateCsrfToken();
+    }
+
+    /**
+     * Verify CSRF token
+     * 
+     * @param string $token
+     * @return bool
+     */
+    public static function verifyCsrfToken(string $token): bool
+    {
+        $sessionToken = self::get('csrf_token');
+
+        if (!$sessionToken) {
+            return false;
+        }
+
+        return hash_equals($sessionToken, $token);
+    }
+
+    /**
+     * Get CSRF input field HTML
+     * 
+     * @return string
+     */
+    public static function csrfField(): string
+    {
+        $token = self::csrfToken();
+        return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token) . '">';
     }
 }

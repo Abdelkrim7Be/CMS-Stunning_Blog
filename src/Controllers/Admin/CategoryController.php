@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Core\Session;
 
 /**
@@ -20,11 +21,25 @@ class CategoryController extends Controller
     {
         $this->requireAuth();
 
-        $categories = Category::all();
+        // Pagination
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $perPage = 10;
+        $offset = ($currentPage - 1) * $perPage;
+
+        // Get total count and calculate pages
+        $totalCategories = Category::count();
+        $totalPages = ceil($totalCategories / $perPage);
+
+        // Get paginated categories
+        $categories = Category::paginate($perPage, $offset);
 
         $this->view('admin/categories/index', [
             'categories' => $categories,
-            'title' => 'Manage Categories'
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'totalCategories' => $totalCategories,
+            'title' => 'Manage Categories',
+            'pending_comments' => Comment::countPending(),
         ], 'layouts/admin');
     }
 
@@ -33,10 +48,11 @@ class CategoryController extends Controller
      */
     public function create(): void
     {
-        $this->requireAuth();
+        $this->requirePermission('manage_categories', 'Only admins and above can create categories');
 
         $this->view('admin/categories/create', [
-            'title' => 'Create New Category'
+            'title' => 'Create New Category',
+            'pending_comments' => Comment::countPending(),
         ], 'layouts/admin');
     }
 
@@ -45,14 +61,12 @@ class CategoryController extends Controller
      */
     public function store(): void
     {
-        $this->requireAuth();
-
-        $user = Session::get('user');
+        $this->requirePermission('manage_categories', 'Only admins and above can create categories');
 
         // Create category
         $data = [
             'title' => $_POST['title'] ?? '',
-            'author' => $user['username'] ?? '',
+            'author' => Session::username() ?? 'Unknown',
             'datetime' => date('F-d-Y H:i:s'),
         ];
 
@@ -70,7 +84,7 @@ class CategoryController extends Controller
      */
     public function delete(int $id): void
     {
-        $this->requireAuth();
+        $this->requirePermission('manage_categories', 'Only admins and above can delete categories');
 
         $category = Category::findById($id);
 

@@ -158,6 +158,26 @@
                 <span x-show="sidebarOpen">Comments</span>
             </a>
 
+            <?php if (can('manage_admins')): ?>
+                <a href="/admin/admins" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white <?= strpos($_SERVER['REQUEST_URI'], '/admin/admins') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-users-cog w-6"></i>
+                    <span x-show="sidebarOpen">Manage Users</span>
+                </a>
+
+                <a href="/admin/roles" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white <?= strpos($_SERVER['REQUEST_URI'], '/admin/roles') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-user-shield w-6"></i>
+                    <span x-show="sidebarOpen">Role Management</span>
+                    <?php
+                    $totalUsers = \App\Models\User::count();
+                    if ($totalUsers > 0):
+                    ?>
+                        <span x-show="sidebarOpen" class="ml-auto bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded-full">
+                            <?= $totalUsers ?>
+                        </span>
+                    <?php endif; ?>
+                </a>
+            <?php endif; ?>
+
             <a href="/admin/profile" class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white <?= strpos($_SERVER['REQUEST_URI'], '/admin/profile') !== false ? 'active' : '' ?>">
                 <i class="fas fa-user w-6"></i>
                 <span x-show="sidebarOpen">Profile</span>

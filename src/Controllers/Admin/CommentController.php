@@ -47,11 +47,9 @@ class CommentController extends Controller
      */
     public function approve(int $id): void
     {
-        $this->requireAuth();
+        $this->requirePermission('approve_comments', 'Only editors and above can approve comments');
 
-        $user = Session::get('user');
-
-        if (Comment::approve($id, $user['username'] ?? 'Admin')) {
+        if (Comment::approve($id, Session::username() ?? 'Admin')) {
             Session::flash('success', 'Comment approved successfully!');
         } else {
             Session::flash('error', 'Failed to approve comment');
@@ -67,7 +65,7 @@ class CommentController extends Controller
      */
     public function disapprove(int $id): void
     {
-        $this->requireAuth();
+        $this->requirePermission('approve_comments', 'Only editors and above can disapprove comments');
 
         if (Comment::disapprove($id)) {
             Session::flash('success', 'Comment disapproved successfully!');
@@ -85,7 +83,7 @@ class CommentController extends Controller
      */
     public function delete(int $id): void
     {
-        $this->requireAuth();
+        $this->requirePermission('delete_any_comment', 'Only editors and above can delete comments');
 
         if (Comment::delete($id)) {
             Session::flash('success', 'Comment deleted successfully!');

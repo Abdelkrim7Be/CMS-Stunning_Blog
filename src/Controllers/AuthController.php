@@ -46,7 +46,7 @@ class AuthController extends Controller
 
         if ($user) {
             // Login successful
-            Session::login($user['id'], $user['username'], $user['aname']);
+            Session::login($user['id'], $user['username'], $user['aname'], $user['role'] ?? 'author');
             Session::flash('success', "Welcome back, {$user['username']}!");
 
             // Redirect to intended page or dashboard

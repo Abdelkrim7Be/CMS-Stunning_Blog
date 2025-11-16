@@ -29,6 +29,7 @@ $router->get('/logout', 'AuthController@logout');
 
 // Admin routes (authentication required - we'll add middleware later)
 $router->get('/admin/dashboard', 'Admin\DashboardController@index');
+$router->get('/admin/search', 'Admin\DashboardController@search');
 $router->get('/admin/posts', 'Admin\PostController@index');
 $router->get('/admin/posts/create', 'Admin\PostController@create');
 $router->post('/admin/posts', 'Admin\PostController@store');
@@ -47,7 +48,19 @@ $router->post('/admin/comments/{id}/disapprove', 'Admin\CommentController@disapp
 $router->post('/admin/comments/{id}/delete', 'Admin\CommentController@delete');
 
 $router->get('/admin/admins', 'Admin\AdminController@index');
+$router->get('/admin/admins/create', 'Admin\AdminController@create');
+$router->post('/admin/admins', 'Admin\AdminController@store');
+$router->get('/admin/admins/{id}/edit', 'Admin\AdminController@edit');
+$router->post('/admin/admins/{id}', 'Admin\AdminController@update');
 $router->post('/admin/admins/{id}/delete', 'Admin\AdminController@delete');
+
+// Role management routes
+$router->get('/admin/roles', 'Admin\RoleController@index');
+$router->get('/admin/roles/assign', 'Admin\RoleController@assign');
+$router->post('/admin/roles/update-user-role', 'Admin\RoleController@updateUserRole');
+$router->post('/admin/roles/bulk-assign', 'Admin\RoleController@bulkAssign');
+$router->get('/admin/roles/permissions/{role}', 'Admin\RoleController@showPermissions');
+$router->get('/admin/roles/users/{role}', 'Admin\RoleController@usersByRole');
 
 $router->get('/admin/profile', 'Admin\ProfileController@index');
 $router->post('/admin/profile', 'Admin\ProfileController@update');

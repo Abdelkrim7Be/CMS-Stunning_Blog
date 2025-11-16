@@ -98,4 +98,61 @@ abstract class Controller
             $this->redirect('/admin/dashboard');
         }
     }
+
+    /**
+     * Check if user has a specific permission
+     * 
+     * @param string $permission
+     * @param string|null $errorMessage
+     */
+    protected function requirePermission(string $permission, ?string $errorMessage = null): void
+    {
+        if (!Session::isAuthenticated()) {
+            Session::flash('error', 'Please login to access this page');
+            $this->redirect('/login');
+        }
+
+        if (!Session::can($permission)) {
+            Session::flash('error', $errorMessage ?? 'You do not have permission to perform this action');
+            $this->redirect('/admin/dashboard');
+        }
+    }
+
+    /**
+     * Check if user has a specific role
+     * 
+     * @param string $role
+     * @param string|null $errorMessage
+     */
+    protected function requireRole(string $role, ?string $errorMessage = null): void
+    {
+        if (!Session::isAuthenticated()) {
+            Session::flash('error', 'Please login to access this page');
+            $this->redirect('/login');
+        }
+
+        if (!Session::hasRole($role)) {
+            Session::flash('error', $errorMessage ?? "You need {$role} role to access this page");
+            $this->redirect('/admin/dashboard');
+        }
+    }
+
+    /**
+     * Check if user has minimum role level
+     * 
+     * @param string $minimumRole
+     * @param string|null $errorMessage
+     */
+    protected function requireMinimumRole(string $minimumRole, ?string $errorMessage = null): void
+    {
+        if (!Session::isAuthenticated()) {
+            Session::flash('error', 'Please login to access this page');
+            $this->redirect('/login');
+        }
+
+        if (!Session::isRoleOrHigher($minimumRole)) {
+            Session::flash('error', $errorMessage ?? 'You do not have sufficient permissions');
+            $this->redirect('/admin/dashboard');
+        }
+    }
 }

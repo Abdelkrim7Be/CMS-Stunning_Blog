@@ -68,8 +68,34 @@ class User
      */
     public static function all(): array
     {
-        $sql = "SELECT * FROM admins ORDER BY id DESC";
+        $sql = "SELECT * FROM admins ORDER BY 
+                CASE role
+                    WHEN 'super_admin' THEN 1
+                    WHEN 'admin' THEN 2
+                    WHEN 'editor' THEN 3
+                    WHEN 'author' THEN 4
+                END, id DESC";
         return Database::query($sql);
+    }
+
+    /**
+     * Get paginated users
+     * 
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     */
+    public static function paginate(int $limit, int $offset): array
+    {
+        $sql = "SELECT * FROM admins ORDER BY 
+                CASE role
+                    WHEN 'super_admin' THEN 1
+                    WHEN 'admin' THEN 2
+                    WHEN 'editor' THEN 3
+                    WHEN 'author' THEN 4
+                END, id DESC
+                LIMIT :limit OFFSET :offset";
+        return Database::query($sql, ['limit' => $limit, 'offset' => $offset]);
     }
 
     /**
@@ -80,12 +106,13 @@ class User
      */
     public static function create(array $data): bool
     {
-        $sql = "INSERT INTO admins (username, password, aname, datetime, added_by, aheadline, abio, aimage) 
-                VALUES (:username, :password, :aname, :datetime, :added_by, :aheadline, :abio, :aimage)";
+        $sql = "INSERT INTO admins (username, password, role, aname, datetime, added_by, aheadline, abio, aimage) 
+                VALUES (:username, :password, :role, :aname, :datetime, :added_by, :aheadline, :abio, :aimage)";
 
         return Database::execute($sql, [
             'username' => $data['username'],
             'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'role' => $data['role'] ?? 'author',
             'aname' => $data['aname'] ?? $data['username'],
             'datetime' => date('F-d-Y H:i:s'),
             'added_by' => $data['added_by'] ?? 'System',
@@ -150,5 +177,64 @@ class User
         $sql = "SELECT COUNT(*) as count FROM admins";
         $result = Database::queryOne($sql);
         return (int)$result['count'];
+    }
+
+    /**
+     * Find users by role
+     * 
+     * @param string $role
+     * @return array
+     */
+    public static function findByRole(string $role): array
+    {
+        $sql = "SELECT * FROM admins WHERE role = :role ORDER BY id DESC";
+        return Database::query($sql, ['role' => $role]);
+    }
+
+    /**
+     * Update user role
+     * 
+     * @param int $id
+     * @param string $role
+     * @return bool
+     */
+    public static function updateRole(int $id, string $role): bool
+    {
+        $sql = "UPDATE admins SET role = :role WHERE id = :id";
+        return Database::execute($sql, [
+            'id' => $id,
+            'role' => $role,
+        ]);
+    }
+
+    /**
+     * Count users by role
+     * 
+     * @param string $role
+     * @return int
+     */
+    public static function countByRole(string $role): int
+    {
+        $sql = "SELECT COUNT(*) as count FROM admins WHERE role = :role";
+        $result = Database::queryOne($sql, ['role' => $role]);
+        return (int)$result['count'];
+    }
+
+    /**
+     * Get role statistics
+     * 
+     * @return array
+     */
+    public static function getRoleStats(): array
+    {
+        $sql = "SELECT role, COUNT(*) as count FROM admins GROUP BY role";
+        $results = Database::query($sql);
+
+        $stats = [];
+        foreach ($results as $row) {
+            $stats[$row['role']] = (int)$row['count'];
+        }
+
+        return $stats;
     }
 }
