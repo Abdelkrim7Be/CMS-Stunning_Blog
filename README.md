@@ -93,15 +93,13 @@ erDiagram
         int id
         varchar username
         varchar password
-        enum role
-        ...
+        role role
     }
     posts {
         int id
         varchar title
         varchar category
         varchar author
-        ...
     }
     comments {
         int id
@@ -109,13 +107,11 @@ erDiagram
         varchar email
         varchar comment
         int post_id
-        ...
     }
     category {
         int id
         varchar title
         varchar author
-        ...
     }
 ```
 
