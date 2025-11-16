@@ -31,6 +31,67 @@ class Post
     }
 
     /**
+     * Get all posts with pagination (for public blog)
+     * 
+     * @param int $page Current page number
+     * @param int $perPage Posts per page
+     * @return array
+     */
+    public static function getAllPosts(int $page = 1, int $perPage = 5): array
+    {
+        $offset = ($page - 1) * $perPage;
+
+        $sql = "SELECT * FROM posts 
+                ORDER BY id DESC 
+                LIMIT :limit OFFSET :offset";
+
+        return Database::query($sql, ['limit' => $perPage, 'offset' => $offset]);
+    }
+
+    /**
+     * Get posts by category name
+     * 
+     * @param string $categoryName
+     * @return array
+     */
+    public static function getByCategoryName(string $categoryName): array
+    {
+        $sql = "SELECT * FROM posts 
+                WHERE category = :category
+                ORDER BY id DESC";
+
+        return Database::query($sql, ['category' => $categoryName]);
+    }
+
+    /**
+     * Get total count of posts
+     * 
+     * @return int
+     */
+    public static function getTotalCount(): int
+    {
+        $sql = "SELECT COUNT(*) as total FROM posts";
+        $result = Database::queryOne($sql);
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Get approved comments count for a post
+     * 
+     * @param int $postId
+     * @return int
+     */
+    public static function getApprovedCommentsCount(int $postId): int
+    {
+        $sql = "SELECT COUNT(*) as total 
+                FROM comments 
+                WHERE post_id = :post_id AND status = 'ON'";
+
+        $result = Database::queryOne($sql, ['post_id' => $postId]);
+        return $result['total'] ?? 0;
+    }
+
+    /**
      * Find post by ID
      * 
      * @param int $id
@@ -133,18 +194,19 @@ class Post
     }
 
     /**
-     * Search posts
+     * Search posts (for Blog.php search functionality)
      * 
      * @param string $query
      * @return array
      */
     public static function search(string $query): array
     {
-        $sql = "SELECT posts.*, categories.title as category_name
-                FROM posts
-                LEFT JOIN categories ON posts.category = categories.id
-                WHERE posts.title LIKE :query OR posts.post LIKE :query
-                ORDER BY posts.datetime DESC";
+        $sql = "SELECT * FROM posts
+                WHERE datetime LIKE :query 
+                   OR category LIKE :query 
+                   OR title LIKE :query 
+                   OR post LIKE :query
+                ORDER BY id DESC";
 
         return Database::query($sql, ['query' => "%{$query}%"]);
     }

@@ -14,6 +14,7 @@
 
 // Public routes (no authentication required)
 $router->get('/', 'BlogController@index');
+$router->get('/blog', 'BlogController@index');
 $router->get('/post/{id}', 'BlogController@show');
 $router->get('/category/{id}', 'BlogController@category');
 

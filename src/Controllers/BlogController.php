@@ -9,22 +9,69 @@ use App\Models\Category;
  * BlogController
  * 
  * Handles public blog pages
+ * Refactored from legacy Blog.php to follow MVC architecture
  */
 class BlogController extends Controller
 {
     /**
      * Show blog homepage
+     * 
+     * Handles:
+     * - Default blog listing with pagination
+     * - Search functionality
+     * - Category filtering
      */
     public function index(): void
     {
-        $posts = Post::all(10, 0);
+        // Initialize variables
+        $posts = [];
+        $totalPosts = 0;
+        $currentPage = 1;
+        $postsPerPage = 5;
+        $searchQuery = null;
+        $categoryFilter = null;
+
+        // Handle SEARCH functionality
+        if (isset($_GET['SearchButton']) && !empty($_GET['Search'])) {
+            $searchQuery = htmlspecialchars($_GET['Search']);
+            $posts = Post::search($searchQuery);
+            $totalPosts = count($posts);
+        }
+        // Handle CATEGORY filtering
+        elseif (isset($_GET['category']) && !empty($_GET['category'])) {
+            $categoryFilter = htmlspecialchars($_GET['category']);
+            $posts = Post::getByCategoryName($categoryFilter);
+            $totalPosts = count($posts);
+        }
+        // Handle PAGINATION
+        elseif (isset($_GET['page']) && is_numeric($_GET['page'])) {
+            $currentPage = max(1, (int)$_GET['page']);
+            $posts = Post::getAllPosts($currentPage, $postsPerPage);
+            $totalPosts = Post::getTotalCount();
+        }
+        // Default: Show first 3 posts
+        else {
+            $posts = Post::getAllPosts(1, 3);
+            $totalPosts = Post::getTotalCount();
+        }
+
+        // Get all categories for sidebar
         $categories = Category::all();
 
+        // Calculate pagination
+        $totalPages = ceil($totalPosts / $postsPerPage);
+
+        // Render the view with data
         $this->view('blog/index', [
-            'title' => 'Home - Stunning Blog',
+            'title' => 'Blog - ABDELKRIMBELLAGNECH.COM',
             'posts' => $posts,
             'categories' => $categories,
-        ], 'layouts/blog');
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'postsPerPage' => $postsPerPage,
+            'searchQuery' => $searchQuery,
+            'categoryFilter' => $categoryFilter,
+        ], 'layouts/main');
     }
 
     /**
