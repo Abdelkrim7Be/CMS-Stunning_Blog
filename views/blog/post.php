@@ -43,7 +43,7 @@
 
                 <!-- Post Body -->
                 <div class="prose prose-lg max-w-none">
-                    <?= nl2br(htmlspecialchars($post['content'])) ?>
+                    <?= nl2br(htmlspecialchars($post['post'] ?? '')) ?>
                 </div>
 
                 <!-- Tags (if available) -->

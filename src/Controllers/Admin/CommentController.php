@@ -20,11 +20,25 @@ class CommentController extends Controller
     {
         $this->requireAuth();
 
-        $comments = Comment::all();
+        // Pagination
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $perPage = 15;
+        $offset = ($page - 1) * $perPage;
+
+        // Get total count
+        $totalComments = Comment::count();
+        $totalPages = ceil($totalComments / $perPage);
+
+        // Get paginated comments
+        $comments = Comment::paginate($perPage, $offset);
 
         $this->view('admin/comments/index', [
             'comments' => $comments,
-            'title' => 'Manage Comments'
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalComments' => $totalComments,
+            'title' => 'Manage Comments',
+            'pending_comments' => Comment::countPending(),
         ], 'layouts/admin');
     }
 
@@ -43,7 +57,9 @@ class CommentController extends Controller
             Session::flash('error', 'Failed to approve comment');
         }
 
-        $this->redirect('/admin/comments');
+        // Redirect back to where the request came from
+        $redirect = $_POST['redirect'] ?? '/admin/comments';
+        $this->redirect($redirect);
     }
 
     /**
@@ -59,7 +75,9 @@ class CommentController extends Controller
             Session::flash('error', 'Failed to disapprove comment');
         }
 
-        $this->redirect('/admin/comments');
+        // Redirect back to where the request came from
+        $redirect = $_POST['redirect'] ?? '/admin/comments';
+        $this->redirect($redirect);
     }
 
     /**

@@ -203,14 +203,15 @@
             </h2>
         </div>
         <div class="p-6">
-            <?php if (empty($pending_comments)): ?>
+            <?php if (empty($pending_comments_list ?? [])): ?>
                 <div class="text-center py-8">
                     <i class="fas fa-check-circle text-5xl text-green-500 mb-3"></i>
-                    <p class="text-gray-500 text-sm">All caught up!</p>
+                    <p class="text-gray-600 font-medium">No pending comments.</p>
+                    <p class="text-gray-500 text-sm mt-1">All caught up!</p>
                 </div>
             <?php else: ?>
                 <div class="space-y-4 max-h-96 overflow-y-auto">
-                    <?php foreach (array_slice($pending_comments, 0, 5) as $comment): ?>
+                    <?php foreach (array_slice($pending_comments_list, 0, 5) as $comment): ?>
                         <div class="p-4 rounded-lg border border-gray-200 hover:border-black transition-colors">
                             <div class="flex items-start space-x-3">
                                 <div class="w-10 h-10 bg-gray-900 text-white rounded-full flex items-center justify-center font-bold">
@@ -224,16 +225,18 @@
                                         <?= htmlspecialchars(substr($comment['comment'], 0, 80)) ?>...
                                     </p>
                                     <div class="flex items-center space-x-2 mt-3">
-                                        <a
-                                            href="/admin/comments?approve=<?= $comment['id'] ?>"
-                                            class="px-3 py-1 bg-black text-white rounded text-xs hover:bg-gray-800 transition-colors">
-                                            <i class="fas fa-check"></i> Approve
-                                        </a>
-                                        <a
-                                            href="/admin/comments?delete=<?= $comment['id'] ?>"
-                                            class="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300 transition-colors">
-                                            <i class="fas fa-times"></i> Reject
-                                        </a>
+                                        <form method="POST" action="/admin/comments/<?= $comment['id'] ?>/approve" class="inline">
+                                            <input type="hidden" name="redirect" value="/admin/dashboard">
+                                            <button type="submit" class="px-3 py-1 bg-black text-white rounded text-xs hover:bg-gray-800 transition-colors">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="/admin/comments/<?= $comment['id'] ?>/disapprove" class="inline">
+                                            <input type="hidden" name="redirect" value="/admin/dashboard">
+                                            <button type="submit" class="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300 transition-colors">
+                                                <i class="fas fa-times"></i> Reject
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -380,33 +383,4 @@
         }
     });
 </script>
-
-<!-- Pending Comments -->
-<div class="col-md-4 mb-4">
-    <div class="card">
-        <div class="card-header bg-white">
-            <h5 class="mb-0"><i class="fas fa-clock"></i> Pending Comments</h5>
-        </div>
-        <div class="card-body">
-            <?php if (empty($pending_comments)): ?>
-                <p class="text-muted">No pending comments.</p>
-            <?php else: ?>
-                <div style="max-height: 400px; overflow-y: auto;">
-                    <?php foreach ($pending_comments as $comment): ?>
-                        <div class="border-bottom pb-2 mb-2">
-                            <strong><?= htmlspecialchars($comment['name']) ?></strong>
-                            <p class="mb-1 small text-muted"><?= htmlspecialchars(substr($comment['comment'], 0, 100)) ?>...</p>
-                            <small class="text-muted">
-                                <i class="far fa-clock"></i> <?= date('M d', strtotime($comment['datetime'])) ?>
-                            </small>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                <a href="/admin/comments" class="btn btn-sm btn-primary btn-block mt-3">
-                    View All Comments
-                </a>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
 </div>

@@ -264,7 +264,7 @@
             </div>
 
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; <?= date('Y') ?> Stunning Blog. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i></p>
+                <p>&copy; <?= date('Y') ?> Stunning Blog. All rights reserved.</p>
             </div>
         </div>
     </footer>

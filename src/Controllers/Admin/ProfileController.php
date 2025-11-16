@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\Controller;
 use App\Models\User;
+use App\Models\Comment;
 use App\Core\Session;
 
 /**
@@ -38,7 +39,8 @@ class ProfileController extends Controller
 
         $this->view('admin/profile/index', [
             'profile' => $profile,
-            'title' => 'My Profile'
+            'title' => 'My Profile',
+            'pending_comments' => Comment::countPending(),
         ], 'layouts/admin');
     }
 

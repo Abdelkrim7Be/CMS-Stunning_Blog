@@ -194,19 +194,87 @@
 
                     <div class="flex items-center space-x-4">
                         <!-- Search Bar -->
-                        <div class="relative hidden md:block">
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
-                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        <div class="relative hidden md:block" x-data="{ searchOpen: false }">
+                            <form action="/admin/search" method="GET" class="relative">
+                                <input
+                                    type="text"
+                                    name="q"
+                                    placeholder="Search posts, categories..."
+                                    value="<?= htmlspecialchars($_GET['q'] ?? '') ?>"
+                                    @focus="searchOpen = true"
+                                    @blur="setTimeout(() => searchOpen = false, 200)"
+                                    class="pl-10 pr-4 py-2 w-64 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                    autocomplete="off">
+                                <button type="submit" class="absolute left-3 top-3 text-gray-400 hover:text-black">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+
+                            <!-- Search suggestions (optional) -->
+                            <div x-show="searchOpen"
+                                x-transition
+                                class="absolute top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 hidden">
+                                <div class="p-3 text-xs text-gray-500">
+                                    <p>Search for posts, categories, or comments</p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Notifications -->
-                        <button class="relative p-2 text-gray-600 hover:text-black transition-colors">
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
+                        <div class="relative" x-data="{ notifOpen: false }">
+                            <button @click="notifOpen = !notifOpen"
+                                class="relative p-2 text-gray-600 hover:text-black transition-colors">
+                                <i class="fas fa-bell text-xl"></i>
+                                <?php if (($pending_comments ?? 0) > 0): ?>
+                                    <span class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                                        <?= min($pending_comments ?? 0, 9) ?><?= ($pending_comments ?? 0) > 9 ? '+' : '' ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="absolute top-0 right-0 w-2 h-2 bg-gray-400 rounded-full"></span>
+                                <?php endif; ?>
+                            </button>
+
+                            <!-- Notifications Dropdown -->
+                            <div x-show="notifOpen"
+                                @click.away="notifOpen = false"
+                                x-transition
+                                class="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
+                                <div class="p-4 border-b border-gray-200">
+                                    <h3 class="font-bold text-gray-900">Notifications</h3>
+                                </div>
+                                <div class="max-h-96 overflow-y-auto">
+                                    <?php if (($pending_comments ?? 0) > 0): ?>
+                                        <a href="/admin/comments" class="block p-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="flex-shrink-0 w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-comment text-yellow-600"></i>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-semibold text-gray-900">
+                                                        <?= $pending_comments ?? 0 ?> Pending Comment<?= ($pending_comments ?? 0) !== 1 ? 's' : '' ?>
+                                                    </p>
+                                                    <p class="text-xs text-gray-500 mt-1">
+                                                        Waiting for your approval
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    <?php endif; ?>
+
+                                    <?php if (($pending_comments ?? 0) === 0): ?>
+                                        <div class="p-8 text-center">
+                                            <i class="fas fa-bell-slash text-4xl text-gray-300 mb-3"></i>
+                                            <p class="text-sm text-gray-500">No new notifications</p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="p-3 border-t border-gray-200 text-center">
+                                    <a href="/admin/comments" class="text-sm text-black hover:text-gray-700 font-medium">
+                                        View All Comments <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,11 +288,8 @@
         <!-- Footer -->
         <footer class="bg-white border-t border-gray-200 mt-12">
             <div class="px-6 py-4">
-                <div class="flex flex-col md:flex-row items-center justify-between text-sm text-gray-600">
+                <div class="flex items-center justify-center text-sm text-gray-600">
                     <p>&copy; <?= date('Y') ?> CMS Admin Panel. All rights reserved.</p>
-                    <p class="mt-2 md:mt-0">
-                        Made with <i class="fas fa-heart text-red-500"></i> by Your Team
-                    </p>
                 </div>
             </div>
         </footer>

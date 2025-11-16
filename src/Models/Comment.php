@@ -25,6 +25,24 @@ class Comment
     }
 
     /**
+     * Get paginated comments
+     * 
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     */
+    public static function paginate(int $limit = 10, int $offset = 0): array
+    {
+        $sql = "SELECT comments.*, posts.title as post_title
+                FROM comments
+                LEFT JOIN posts ON comments.post_id = posts.id
+                ORDER BY comments.datetime DESC
+                LIMIT :limit OFFSET :offset";
+
+        return Database::query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
+    /**
      * Get comments by post ID
      * 
      * @param int $postId

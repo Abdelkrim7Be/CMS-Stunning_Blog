@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Core\Session;
 
 /**
@@ -21,11 +22,25 @@ class PostController extends Controller
     {
         $this->requireAuth();
 
-        $posts = Post::all(100); // Get all posts
+        // Pagination
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
+
+        // Get total count
+        $totalPosts = Post::count();
+        $totalPages = ceil($totalPosts / $perPage);
+
+        // Get paginated posts
+        $posts = Post::all($perPage, $offset);
 
         $this->view('admin/posts/index', [
             'posts' => $posts,
-            'title' => 'Manage Posts'
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalPosts' => $totalPosts,
+            'title' => 'Manage Posts',
+            'pending_comments' => Comment::countPending(),
         ], 'layouts/admin');
     }
 
@@ -40,7 +55,8 @@ class PostController extends Controller
 
         $this->view('admin/posts/create', [
             'categories' => $categories,
-            'title' => 'Create New Post'
+            'title' => 'Create New Post',
+            'pending_comments' => Comment::countPending(),
         ], 'layouts/admin');
     }
 
@@ -106,7 +122,8 @@ class PostController extends Controller
         $this->view('admin/posts/edit', [
             'post' => $post,
             'categories' => $categories,
-            'title' => 'Edit Post'
+            'title' => 'Edit Post',
+            'pending_comments' => Comment::countPending(),
         ], 'layouts/admin');
     }
 

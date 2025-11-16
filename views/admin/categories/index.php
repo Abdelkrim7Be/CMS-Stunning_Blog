@@ -86,11 +86,72 @@
                     </tbody>
                 </table>
 
-                <!-- Stats Footer -->
+                <!-- Pagination -->
                 <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                    <p class="text-sm text-gray-600">
-                        Total: <span class="font-semibold text-gray-900"><?= count($categories) ?></span> categories
-                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <!-- Info -->
+                        <p class="text-sm text-gray-600">
+                            Showing <span class="font-semibold text-gray-900"><?= count($categories) ?></span> of
+                            <span class="font-semibold text-gray-900"><?= $totalCategories ?? 0 ?></span> categories
+                        </p>
+
+                        <!-- Pagination Controls -->
+                        <?php if (isset($totalPages) && $totalPages > 1): ?>
+                            <div class="flex items-center space-x-2">
+                                <!-- Previous Button -->
+                                <?php if ($currentPage > 1): ?>
+                                    <a href="/admin/categories?page=<?= $currentPage - 1 ?>"
+                                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                                        <i class="fas fa-chevron-left mr-1"></i> Previous
+                                    </a>
+                                <?php else: ?>
+                                    <span class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-400 text-sm font-medium cursor-not-allowed">
+                                        <i class="fas fa-chevron-left mr-1"></i> Previous
+                                    </span>
+                                <?php endif; ?>
+
+                                <!-- Page Numbers -->
+                                <div class="hidden sm:flex items-center space-x-1">
+                                    <?php
+                                    $startPage = max(1, $currentPage - 2);
+                                    $endPage = min($totalPages, $currentPage + 2);
+
+                                    if ($startPage > 1): ?>
+                                        <a href="/admin/categories?page=1" class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">1</a>
+                                        <?php if ($startPage > 2): ?>
+                                            <span class="px-2 text-gray-500">...</span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+                                        <a href="/admin/categories?page=<?= $i ?>"
+                                            class="px-3 py-2 <?= $i === $currentPage ? 'bg-black text-white' : 'bg-white hover:bg-gray-50' ?> border border-gray-300 rounded-lg transition-colors text-sm font-medium">
+                                            <?= $i ?>
+                                        </a>
+                                    <?php endfor; ?>
+
+                                    <?php if ($endPage < $totalPages): ?>
+                                        <?php if ($endPage < $totalPages - 1): ?>
+                                            <span class="px-2 text-gray-500">...</span>
+                                        <?php endif; ?>
+                                        <a href="/admin/categories?page=<?= $totalPages ?>" class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"><?= $totalPages ?></a>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Next Button -->
+                                <?php if ($currentPage < $totalPages): ?>
+                                    <a href="/admin/categories?page=<?= $currentPage + 1 ?>"
+                                        class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                                        Next <i class="fas fa-chevron-right ml-1"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-400 text-sm font-medium cursor-not-allowed">
+                                        Next <i class="fas fa-chevron-right ml-1"></i>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>

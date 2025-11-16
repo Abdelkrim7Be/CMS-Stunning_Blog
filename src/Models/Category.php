@@ -73,4 +73,24 @@ class Category
         $result = Database::queryOne($sql);
         return (int)$result['count'];
     }
+
+    /**
+     * Get paginated categories with post counts
+     * 
+     * @param int $limit Number of categories per page
+     * @param int $offset Starting offset
+     * @return array
+     */
+    public static function paginate(int $limit, int $offset): array
+    {
+        $sql = "SELECT c.*, 
+                       (SELECT COUNT(*) FROM posts WHERE category = c.title) as posts_count 
+                FROM category c 
+                ORDER BY c.title ASC 
+                LIMIT :limit OFFSET :offset";
+        return Database::query($sql, [
+            'limit' => $limit,
+            'offset' => $offset
+        ]);
+    }
 }

@@ -80,7 +80,7 @@ class BlogController extends Controller
         $totalPages = ceil($totalPosts / $postsPerPage);
 
         // Render the view with data
-        $this->view('blog/home', [
+        $this->view('blog/index', [
             'title' => 'Stunning Blog - Modern Content Platform',
             'posts' => $posts,
             'categories' => $categories,
@@ -115,8 +115,8 @@ class BlogController extends Controller
 
             if ($name && $email && $commentText) {
                 // Insert comment into database (status OFF = pending approval)
-                $sql = "INSERT INTO comments (post_id, name, email, comment, datetime, status) 
-                        VALUES (:post_id, :name, :email, :comment, NOW(), 'OFF')";
+                $sql = "INSERT INTO comments (post_id, name, email, comment, datetime, status, approvedby) 
+                        VALUES (:post_id, :name, :email, :comment, NOW(), 'OFF', '')";
 
                 try {
                     \App\Core\Database::execute($sql, [
@@ -157,12 +157,26 @@ class BlogController extends Controller
             return;
         }
 
-        $posts = Post::byCategory($id);
+        // Pagination
+        $currentPage = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $perPage = 6;
+        $offset = ($currentPage - 1) * $perPage;
+
+        // Get all posts by category (for total count)
+        $allPosts = Post::byCategory($id);
+        $totalPosts = count($allPosts);
+        $totalPages = ceil($totalPosts / $perPage);
+
+        // Get paginated posts
+        $posts = array_slice($allPosts, $offset, $perPage);
 
         $this->view('blog/category', [
             'title' => $category['title'] . ' - Stunning Blog',
             'category' => $category,
             'posts' => $posts,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'totalPosts' => $totalPosts,
         ], 'layouts/blog');
     }
 
@@ -201,13 +215,26 @@ class BlogController extends Controller
 
         $author = $author[0];
 
-        // Get author's posts
-        $posts = Post::getByAuthor($username);
+        // Pagination
+        $currentPage = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $perPage = 6;
+        $offset = ($currentPage - 1) * $perPage;
+
+        // Get all author's posts (for total count)
+        $allPosts = Post::getByAuthor($username);
+        $totalPosts = count($allPosts);
+        $totalPages = ceil($totalPosts / $perPage);
+
+        // Get paginated posts
+        $posts = array_slice($allPosts, $offset, $perPage);
 
         $this->view('blog/profile', [
             'title' => $author['aname'] . ' - Author Profile',
             'author' => $author,
             'posts' => $posts,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'totalPosts' => $totalPosts,
         ], 'layouts/blog');
     }
 }
