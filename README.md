@@ -37,20 +37,17 @@
 
 ## Screenshots
 
-### Website View
 
-![Website View](demo/Website_view.png)
-
-### Blogs
-
+### Home Page
 ![Home Page](demo/Home_blogs.png)
 
-### Admin Panel
+### Website View
+![Website View](demo/Website_view.png)
 
+### Admin Panel
 ![Admin Panel](demo/admin_panel.png)
 
 ### Role Management
-
 ![Role Management](demo/Role%20management.png)
 
 ---
